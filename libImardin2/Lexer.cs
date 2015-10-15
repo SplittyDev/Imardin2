@@ -32,10 +32,12 @@ namespace libImardin2 {
 					Read ();
 					ReadRegister ();
 					break;
+				/*
 				case '$':
 					Read ();
 					ReadLabelOrRegisterReference ();
 					break;
+				*/
 				case '#':
 					Read ();
 					ReadComment ();

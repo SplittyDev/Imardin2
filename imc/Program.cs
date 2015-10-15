@@ -28,7 +28,10 @@ namespace imc {
 
 		public static void DumpAst (ASTNode node, int depth = 0, bool istarget = false) {
 
-			var nodename = node.ToString ().Replace ("libImardin2.", string.Empty);
+			var nodename = node
+				.ToString ()
+				.Replace ("libImardin2.", string.Empty)
+				.Replace ("Node", string.Empty);
 
 			// Get target field
 			var _target_field = node.GetType ()
@@ -46,7 +49,8 @@ namespace imc {
 				string value = _target_field
 					.GetValue (node)
 					.ToString ()
-					.Replace ("libImardin2.", string.Empty);
+					.Replace ("libImardin2.", string.Empty)
+					.Replace ("Node", string.Empty);
 				DumpAst (((GenericTargetNode)node).Target, depth + 1, istarget: true);
 			}
 
@@ -58,7 +62,7 @@ namespace imc {
 
 			// Anything else
 			else
-				Console.WriteLine ("{0} {1}{2}", "".PadLeft (depth, '-'), istarget ? "Target: " : string.Empty, nodename);
+				Console.WriteLine (string.Format ("{0} {1}{2}", "".PadLeft (depth, '-'), istarget ? "Target: " : string.Empty, nodename).Trim ());
 
 			// Iterate over children
 			foreach (var child in node.Children) {

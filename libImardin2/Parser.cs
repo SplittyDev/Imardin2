@@ -19,30 +19,29 @@ namespace libImardin2 {
 		}
 
 		public ASTNode ParseFullInstruction () {
-			Console.WriteLine ("[PARSE] Full instruction");
-			Console.WriteLine (tokens [pos].Type);
+			//Console.WriteLine ("[PARSE] Full instruction");
 
 			// Identifier
 			if (Match (TokenType.Identifier)) {
-				Console.WriteLine ("[PARSE] Full instruction :: Identifier");
+				//Console.WriteLine ("[PARSE] Full instruction :: Identifier");
 				var ident = tokens [pos].UnboxAs<string> ().ToLowerInvariant ();
 
 				// Instruction
 				if (Enum.IsDefined (typeof(Instruction), ident)) {
-					Console.WriteLine ("[PARSE] Full instruction :: Identifier :: Instruction");
+					//Console.WriteLine ("[PARSE] Full instruction :: Identifier :: Instruction");
 					return ParseInstruction ();
 				}
 
 				// Non-instruction identifier
 				else {
-					Console.WriteLine ("[PARSE] Full instruction :: Identifier :: Identifier");
+					//Console.WriteLine ("[PARSE] Full instruction :: Identifier :: Identifier");
 					return ParseIdentifier ();
 				}
 			}
 
 			// Label definition
 			else if (Match (TokenType.LabelDefinition)) {
-				Console.WriteLine ("[PARSE] Full instruction :: LabelDefinition");
+				//Console.WriteLine ("[PARSE] Full instruction :: LabelDefinition");
 				var label = Expect (TokenType.LabelDefinition).UnboxAs<string> ();
 				return new LabelDefinitionNode (label);
 			}
@@ -52,13 +51,16 @@ namespace libImardin2 {
 		}
 
 		public ASTNode ParseInstruction () {
-			Console.WriteLine ("[PARSE] Instruction");
+			//Console.WriteLine ("[PARSE] Instruction");
 
 			var ident = Expect (TokenType.Identifier);
 			switch (ident.UnboxAs<string> ()) {
 
 			case "jmp":
 				return ParseInstructionJmp ();
+
+			case "mov":
+				return ParseInstructionMov ();
 			
 			// Other instructions (not implemented)
 			default:
@@ -69,36 +71,74 @@ namespace libImardin2 {
 		}
 
 		public ASTNode ParseInstructionJmp () {
-			JmpNode jmp;
+			//Console.WriteLine ("[PARSE] Instruction :: jmp");
+			var jmp = new GenericInstructionNode ("jmp");
 
 			// Instruction target is label
 			if (Match (TokenType.Identifier)) {
-				Console.WriteLine ("[PARSE] Instruction :: Identifier");
+				//Console.WriteLine ("[PARSE] Instruction :: jmp :: Identifier");
 				var ident = Expect (TokenType.Identifier).UnboxAs<string> ();
-				Console.WriteLine ("[INFO] Instruction :: Identifier is Label '{0}'", ident);
-				jmp = new JmpNode (new LabelTargetNode (ident));
+				//Console.WriteLine ("[INFO] Target label: '{0}'", ident);
+				jmp.AddChild (new LabelTargetNode (ident));
 				return jmp;
 			}
 
 			// Instruction target is address
-			if (Match (TokenType.Int8)) {
-				Console.WriteLine ("[PARSE] Instruction :: Int8");
-				jmp = new JmpNode (new Int8Node (Expect (TokenType.Int8).UnboxAs<byte> ()));
-				return jmp;
-			} else if (Match (TokenType.Int16)) {
-				Console.WriteLine ("[PARSE] Instruction :: Int16");
-				jmp = new JmpNode (new Int16Node (Expect (TokenType.Int16).UnboxAs<Int16> ()));
-				return jmp;
-			} else if (Match (TokenType.Int32)) {
-				Console.WriteLine ("[PARSE] Instruction :: Int32");
-				jmp = new JmpNode (new Int32Node (Expect (TokenType.Int32).UnboxAs<Int32> ()));
-				return jmp;
-			} else if (Match (TokenType.Int64)) {
-				Console.WriteLine ("[PARSE] Instruction :: Int64");
-				jmp = new JmpNode (new Int64Node (Expect (TokenType.Int64).UnboxAs<Int64> ()));
+			if (MatchIsNumber ()) {
+				jmp.AddChild (ParseNumber ());
 				return jmp;
 			}
 
+			ThrowUnexpected ();
+			return new ASTNode ();
+		}
+
+		public ASTNode ParseInstructionMov () {
+			//Console.WriteLine ("[PARSE] Instruction :: mov");
+			var mov = new GenericInstructionNode ("mov");
+			mov.AddChild (ParseOperandAny ());
+			Expect (TokenType.Comma);
+			mov.AddChild (ParseOperandAny ());
+			return mov;
+		}
+
+		public ASTNode ParseOperandAny () {
+			//Console.WriteLine ("[PARSE] Operand");
+
+			// Operand is register
+			if (Match (TokenType.Register)) {
+				//Console.WriteLine ("[PARSE] Operand :: Register");
+				var reg = Expect (TokenType.Register);
+				return new RegisterTargetNode (reg.UnboxAs<string> ());
+			}
+
+			// Operand is label
+			else if (Match (TokenType.Identifier)) {
+				//Console.WriteLine ("[PARSE] Operand :: Identifier");
+				var ident = Expect (TokenType.Identifier).UnboxAs<string> ();
+				//Console.WriteLine ("[INFO] Target label: '{0}'", ident);
+				return new LabelTargetNode (ident);
+			}
+
+			// Operand is number / address
+			else if (MatchIsNumber ()) {
+				//Console.WriteLine ("[PARSE] Operand :: Address");
+				return ParseNumber ();
+			}
+
+			ThrowUnexpected ();
+			return new ASTNode ();
+		}
+
+		public ASTNode ParseNumber () {
+			if (Match (TokenType.Int8))
+				return new Int8Node (Expect (TokenType.Int8).UnboxAs<byte> ());
+			else if (Match (TokenType.Int16))
+				return new Int16Node (Expect (TokenType.Int16).UnboxAs<Int16> ());
+			else if (Match (TokenType.Int32))
+				return new Int32Node (Expect (TokenType.Int32).UnboxAs<Int32> ());
+			else if (Match (TokenType.Int64))
+				return new Int64Node (Expect (TokenType.Int64).UnboxAs<Int64> ());
 			ThrowUnexpected ();
 			return new ASTNode ();
 		}
@@ -110,6 +150,16 @@ namespace libImardin2 {
 
 		bool Match (TokenType type) {
 			return CanAdvance () && tokens [pos].Type == type;
+		}
+
+		bool MatchIsNumber () {
+			if (!CanAdvance ())
+				return false;
+			return
+				Match (TokenType.Int8)	||
+				Match (TokenType.Int16) ||
+				Match (TokenType.Int32) ||
+				Match (TokenType.Int64);
 		}
 
 		bool Accept (TokenType type) {
