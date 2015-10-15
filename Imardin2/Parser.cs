@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using libImardin2;
 
-namespace imc {
+namespace libImardin2 {
 	public class Parser {
 		int pos;
 		readonly List<Token> tokens;

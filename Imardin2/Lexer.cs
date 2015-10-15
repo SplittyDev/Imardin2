@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using libImardin2;
 
-namespace imc {
+namespace libImardin2 {
 	public class Lexer {
 		
 		readonly string source;

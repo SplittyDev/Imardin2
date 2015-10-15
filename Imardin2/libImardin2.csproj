@@ -49,6 +49,15 @@
     <Compile Include="Memory.cs" />
     <Compile Include="InstructionImpl.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Lexer.cs" />
+    <Compile Include="Token.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="AST\ASTNode.cs" />
+    <Compile Include="AST\CodeContainerNode.cs" />
+    <Compile Include="AST\GenericNode.cs" />
+    <Compile Include="AST\IntNode.cs" />
+    <Compile Include="AST\JmpNode.cs" />
+    <Compile Include="AST\LabelTargetNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace imc {
+namespace libImardin2 {
 	public class CodeContainerNode : ASTNode {
 	}
 }

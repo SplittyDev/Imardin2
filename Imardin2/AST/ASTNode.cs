@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace imc {
+namespace libImardin2 {
 	public class ASTNode {
 		public List<ASTNode> Children;
 

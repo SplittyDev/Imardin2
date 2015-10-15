@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace imc {
+namespace libImardin2 {
 	public class JmpNode : GenericTargetNode {
 		public JmpNode (ASTNode target) {
 			Target = target;
