@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libImardin2", "Imardin2\libImardin2.csproj", "{A2DC4EFA-5690-40A1-AA7B-2682929004AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libImardin2", "libImardin2\libImardin2.csproj", "{A2DC4EFA-5690-40A1-AA7B-2682929004AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "imc", "imc\imc.csproj", "{339B9602-471F-4584-9434-CDE26375847A}"
 EndProject

@@ -43,7 +43,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Imardin2\libImardin2.csproj">
+    <ProjectReference Include="..\libImardin2\libImardin2.csproj">
       <Project>{A2DC4EFA-5690-40A1-AA7B-2682929004AF}</Project>
       <Name>libImardin2</Name>
     </ProjectReference>

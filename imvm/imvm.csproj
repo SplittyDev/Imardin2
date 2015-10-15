@@ -40,17 +40,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Imardin2\libImardin2.csproj">
-      <Project>{A2DC4EFA-5690-40A1-AA7B-2682929004AF}</Project>
-      <Name>libImardin2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="imvm.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libImardin2\libImardin2.csproj">
+      <Project>{A2DC4EFA-5690-40A1-AA7B-2682929004AF}</Project>
+      <Name>libImardin2</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
