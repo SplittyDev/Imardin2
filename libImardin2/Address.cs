@@ -6,21 +6,21 @@ namespace libImardin2 {
 
 		public static readonly Address Last = UInt32.MaxValue;
 
-		public virtual uint Value { get; private set; }
+		public virtual UInt64 Value { get; private set; }
 
 		public Address () {
 			Value = 0;
 		}
 
-		public Address (uint val) {
+		public Address (UInt64 val) {
 			Value = val;
 		}
 
-		public static implicit operator uint (Address addr) {
+		public static implicit operator UInt64 (Address addr) {
 			return addr.Value;
 		}
 
-		public static implicit operator Address (uint addr) {
+		public static implicit operator Address (UInt64 addr) {
 			return new Address (addr);
 		}
 	}

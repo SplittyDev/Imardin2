@@ -23,14 +23,18 @@ namespace libImardin2 {
 		public Register32 EAX, EBX, ECX, EDX;
 		public Register32 EBP, ESP, ESI, EDI;
 
-		private CPU (uint stackPointer = 0x1024) {
+		CPU (UInt64 stackPointer = 0x1024) {
 			Registers = new List<Register32> ();
 			EAX = new Register32 (TargetRegister.eax, 0);
 			EBX = new Register32 (TargetRegister.ebx, 0);
 			ECX = new Register32 (TargetRegister.ecx, 0);
 			EDX = new Register32 (TargetRegister.edx, 0);
 			EBP = new Register32 (TargetRegister.ebp, 0);
-			ESP = new Register32 (TargetRegister.esp, stackPointer);
+			if (stackPointer > UInt32.MaxValue) {
+				Console.WriteLine ("[ERROR] Long addresses are currently not supported.");
+				Environment.Exit (0);
+			}
+			ESP = new Register32 (TargetRegister.esp, (uint)stackPointer);
 			ESI = new Register32 (TargetRegister.esi, 0);
 			EDI = new Register32 (TargetRegister.edi, 0);
 			Registers.AddRange (new [] {

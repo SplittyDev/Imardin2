@@ -25,12 +25,12 @@ namespace libImardin2 {
 			set { memory [i] = value; }
 		}
 
-		public Memory (UInt32 size = 2 * 1024 * 1024 /* 2Mib */) {
+		public Memory (UInt64 size = 2 * 1024 * 1024 /* 2Mib */) {
 			memory = new byte[size];
 			MemoryFillPercentageChanged += delegate { };
 		}
 
-		public static Memory CreateNew (uint size) {
+		public static Memory CreateNew (UInt64 size) {
 			instance = new Memory (size);
 			return instance;
 		}

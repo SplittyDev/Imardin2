@@ -26,8 +26,8 @@ namespace imvm {
 		[Docs ("Stack address. Use \".\" to use the last available byte.")]
 		public string stackpointer;
 
-		public uint RealMemSize { get { return memorysize.ToAddress (); } }
-		public uint RealStackPointer { get { return stackpointer == "." ? (Address)RealMemSize : stackpointer.ToAddress (); } }
+		public UInt64 RealMemSize { get { return memorysize.ToAddress (); } }
+		public UInt64 RealStackPointer { get { return stackpointer == "." ? (Address)RealMemSize : stackpointer.ToAddress (); } }
 
 		public void Validate () {
 			if (string.IsNullOrEmpty (memorysize)) {
