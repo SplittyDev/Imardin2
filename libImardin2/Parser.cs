@@ -20,6 +20,7 @@ namespace libImardin2 {
 
 		public ASTNode ParseFullInstruction () {
 			Console.WriteLine ("[PARSE] Full instruction");
+			Console.WriteLine (tokens [pos].Type);
 
 			// Identifier
 			if (Match (TokenType.Identifier)) {
@@ -40,21 +41,41 @@ namespace libImardin2 {
 			}
 
 			// Label definition
+			else if (Match (TokenType.LabelDefinition)) {
+				Console.WriteLine ("[PARSE] Full instruction :: LabelDefinition");
+				var label = Expect (TokenType.LabelDefinition).UnboxAs<string> ();
+				return new LabelDefinitionNode (label);
+			}
+
 			ThrowUnexpected ();
 			return new ASTNode ();	
 		}
 
 		public ASTNode ParseInstruction () {
 			Console.WriteLine ("[PARSE] Instruction");
-			Expect (TokenType.Identifier);
 
+			var ident = Expect (TokenType.Identifier);
+			switch (ident.UnboxAs<string> ()) {
+
+			case "jmp":
+				return ParseInstructionJmp ();
+			
+			// Other instructions (not implemented)
+			default:
+				Console.WriteLine ("Not implemented: Instruction '{0}'", ident.UnboxAs<string> ());
+				ThrowUnexpected ();
+				return new ASTNode ();
+			}
+		}
+
+		public ASTNode ParseInstructionJmp () {
 			JmpNode jmp;
 
 			// Instruction target is label
 			if (Match (TokenType.Identifier)) {
 				Console.WriteLine ("[PARSE] Instruction :: Identifier");
 				var ident = Expect (TokenType.Identifier).UnboxAs<string> ();
-				Console.WriteLine ("[INFO] Target is label '{0}'", ident);
+				Console.WriteLine ("[INFO] Instruction :: Identifier is Label '{0}'", ident);
 				jmp = new JmpNode (new LabelTargetNode (ident));
 				return jmp;
 			}
@@ -79,7 +100,7 @@ namespace libImardin2 {
 			}
 
 			ThrowUnexpected ();
-			return new ASTNode (); // temporary
+			return new ASTNode ();
 		}
 
 		public ASTNode ParseIdentifier () {

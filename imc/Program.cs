@@ -22,11 +22,13 @@ namespace imc {
 			var tokens = lexer.Scan ();
 			var parser = new Parser (tokens.ToList ());
 			var ast = parser.Parse ();
-			Console.WriteLine ("[INFO] AST:");
+			Console.WriteLine ("[DUMP] AST:");
 			DumpAst (ast);
 		}
 
-		public static void DumpAst (ASTNode node, int depth = 0) {
+		public static void DumpAst (ASTNode node, int depth = 0, bool istarget = false) {
+
+			var nodename = node.ToString ().Replace ("libImardin2.", string.Empty);
 
 			// Get target field
 			var _target_field = node.GetType ()
@@ -40,20 +42,23 @@ namespace imc {
 
 			// Process target field
 			if (_target_field != default (FieldInfo)) {
-				string value = _target_field.GetValue (node).ToString ();
-				Console.WriteLine ("{0} [TARGET] {1}", "".PadLeft (depth * 2, '-'), node);
-				DumpAst (((GenericTargetNode)node).Target, depth + 1);
+				Console.WriteLine ("{0} {1}{2}", "".PadLeft (depth, '-'), istarget ? "Target: " : string.Empty, nodename);
+				string value = _target_field
+					.GetValue (node)
+					.ToString ()
+					.Replace ("libImardin2.", string.Empty);
+				DumpAst (((GenericTargetNode)node).Target, depth + 1, istarget: true);
 			}
 
 			// Process value field
 			else if (_value_field != default (FieldInfo)) {
 				string value = _value_field.GetValue (node).ToString ();
-				Console.WriteLine ("{0} [VALUE] {1} ({2})", "".PadLeft (depth * 2, '-'), node, value);
+				Console.WriteLine ("{0} {1}{2} (Value: '{3}')", "".PadLeft (depth, '-'), istarget ? "Target: " : string.Empty, nodename, value);
 			}
 
 			// Anything else
 			else
-				Console.WriteLine ("{0} {1}", "".PadLeft (depth, '-'), node);
+				Console.WriteLine ("{0} {1}{2}", "".PadLeft (depth, '-'), istarget ? "Target: " : string.Empty, nodename);
 
 			// Iterate over children
 			foreach (var child in node.Children) {

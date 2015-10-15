@@ -13,6 +13,7 @@ namespace libImardin2 {
 		Int32,
 		Int64,
 		Comma,
+		EOF,
 	}
 
 	public class Token {
