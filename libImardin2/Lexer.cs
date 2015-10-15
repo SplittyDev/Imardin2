@@ -86,9 +86,9 @@ namespace libImardin2 {
 			if (buf <= byte.MaxValue)
 				tokens.Add (new Token (TokenType.Int8, (byte)buf & 0xFF));
 			else if (buf <= Int16.MaxValue)
-				tokens.Add (new Token (TokenType.Int16, (Int16)buf & 0x7FFFF));
+				tokens.Add (new Token (TokenType.Int16, (Int16)buf));
 			else if (buf <= Int32.MaxValue)
-				tokens.Add (new Token (TokenType.Int32, (Int32)buf & 0x7FFFFFFF));
+				tokens.Add (new Token (TokenType.Int32, (Int32)buf));
 			else if (buf <= Int64.MaxValue)
 				tokens.Add (new Token (TokenType.Int64, buf & 0x7FFFFFFFFFFFFFFFL));
 			else

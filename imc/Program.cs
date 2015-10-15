@@ -22,7 +22,7 @@ namespace imc {
 			var tokens = lexer.Scan ();
 			var parser = new Parser (tokens.ToList ());
 			var ast = parser.Parse ();
-			Console.WriteLine ("[DUMP] AST:");
+			Console.WriteLine ("AST:");
 			DumpAst (ast);
 		}
 
